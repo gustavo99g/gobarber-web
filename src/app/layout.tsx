@@ -1,4 +1,5 @@
 import { ChakraProvider } from '@/Providers/chakra';
+import { ReactQueryProvider } from '@/Providers/react-query';
 import type { Metadata } from 'next';
 import { Roboto_Slab } from 'next/font/google';
 
@@ -16,9 +17,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={font.className}>
-        <ChakraProvider>{children}</ChakraProvider>
-      </body>
+      <ReactQueryProvider>
+        <body className={font.className}>
+          <ChakraProvider>{children}</ChakraProvider>
+        </body>
+      </ReactQueryProvider>
     </html>
   );
 }

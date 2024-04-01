@@ -8,7 +8,6 @@ import {
   useRadio,
   UseRadioProps,
   BoxProps,
-  RadioGroupProps,
   forwardRef,
 } from '@chakra-ui/react';
 import { Children, cloneElement } from 'react';
@@ -56,16 +55,18 @@ type ToggleGroupProps = UseRadioGroupProps &
     children: React.ReactElement[];
   };
 
-const ToggleGroup = ({ children, ...props }: ToggleGroupProps) => {
-  const { value, getRootProps, getRadioProps } = useRadioGroup(props);
+const ToggleGroup = forwardRef<ToggleGroupProps, 'div'>(
+  ({ children, ...props }, ref) => {
+    const { value, getRootProps, getRadioProps } = useRadioGroup(props);
 
-  return (
-    <HStack spacing={8} {...getRootProps()} {...props}>
-      {Children.map(children, (child) =>
-        cloneElement(child, getRadioProps(child.props))
-      )}
-    </HStack>
-  );
-};
+    return (
+      <HStack ref={ref} spacing={8} {...getRootProps()} {...props}>
+        {Children.map(children, (child) =>
+          cloneElement(child, getRadioProps(child.props))
+        )}
+      </HStack>
+    );
+  }
+);
 
 export { ToggleGroup, ToggleItem };

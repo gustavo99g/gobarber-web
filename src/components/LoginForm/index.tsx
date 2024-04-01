@@ -1,10 +1,14 @@
 'use client';
-import { VStack, Button, Text } from '@chakra-ui/react';
+import { VStack, Button, Text, useToast } from '@chakra-ui/react';
 import { Input } from '../ui/Input';
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useMutation } from '@tanstack/react-query';
+import { login } from '@/services/user';
+import { useRouter } from 'next/navigation';
+import { setCookie } from '@/app/actions';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Email inválido' }),
@@ -14,16 +18,36 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>;
 
 const LoginForm = () => {
+  const { push } = useRouter();
+
   const {
     handleSubmit,
     register,
-    formState: { isSubmitting, errors },
+    formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
 
+  const toast = useToast();
+
+  const { mutate: loginMutation, isPending } = useMutation({
+    mutationFn: login,
+    onSuccess: async (data) => {
+      toast({
+        title: 'Login realizado com sucesso',
+        status: 'success',
+        position: 'top-right',
+        duration: 3000,
+        isClosable: true,
+      });
+      await setCookie('token', data.token);
+
+      push('/');
+    },
+  });
+
   const onSubmit = (data: any) => {
-    console.log(data);
+    loginMutation(data);
   };
 
   return (
@@ -60,7 +84,7 @@ const LoginForm = () => {
         <Text variant={'error'}>{errors.password.message}</Text>
       )}
 
-      <Button mt={2} type='submit'>
+      <Button mt={2} type='submit' isLoading={isPending}>
         {' '}
         Entrar
       </Button>

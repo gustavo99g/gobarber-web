@@ -1,11 +1,14 @@
 'use client';
-import { VStack, Button, Text } from '@chakra-ui/react';
+import { VStack, Button, Text, useToast } from '@chakra-ui/react';
 import { Controller, useForm } from 'react-hook-form';
 import { Input } from '../ui/Input';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ToggleGroup, ToggleItem } from '../ui/ToggleGroup';
 import { useRouter } from 'next/navigation';
+import { createUser } from '@/services/user';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 const registerSchema = z.object({
   name: z.string().min(3, 'Nome deve ter pelo menos 3 caracteres'),
@@ -17,20 +20,38 @@ const registerSchema = z.object({
 type RegisterFormData = z.input<typeof registerSchema>;
 
 const RegisterForm = () => {
+  const { push } = useRouter();
+  const toast = useToast();
   const {
     handleSubmit,
     register,
-    formState: { isSubmitting, errors },
+    formState: { errors },
     control,
   } = useForm<RegisterFormData>({
+    defaultValues: {
+      isProvider: 'client',
+    },
     resolver: zodResolver(registerSchema),
   });
 
-  const { push } = useRouter();
+  const { mutate: createUserMutation, isPending } = useMutation({
+    mutationFn: createUser,
+    onSuccess: () => {
+      toast({
+        title: 'Conta criada com sucesso',
+        status: 'success',
+        position: 'top-right',
+        duration: 3000,
+        isClosable: true,
+      });
+      push('/login');
+    },
+  });
 
-  const onSubmit = (data: RegisterFormData) => {
-    console.log(data);
-    push('/');
+  const onSubmit = async (data: RegisterFormData) => {
+    createUserMutation(data);
+
+    // push('/');
   };
 
   return (
@@ -92,7 +113,7 @@ const RegisterForm = () => {
         <Text variant={'error'}>{errors.password?.message}</Text>
       )}
 
-      <Button mt={2} type='submit' disabled={isSubmitting}>
+      <Button mt={2} type='submit' isLoading={isPending}>
         Cadastrar
       </Button>
     </VStack>
