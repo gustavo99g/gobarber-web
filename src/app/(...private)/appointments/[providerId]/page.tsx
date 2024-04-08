@@ -1,4 +1,5 @@
 import { AppointmentForm } from '@/components/AppointmentForm';
+import { Header } from '@/components/Header';
 import { Avatar } from '@/components/ui/Avatar';
 import { ArrowIcon } from '@/components/ui/icons/Arrow';
 import { useUser } from '@/hooks/user';
@@ -18,15 +19,7 @@ export default async function AppointmentsPage({
 
   return (
     <>
-      <HStack as={'header'} px={4} py={2} bg={'blackMedium'}>
-        <Button as={Link} href={'/'} variant={'ghost'}>
-          <ArrowIcon color={'gray'} fontSize={'3xl'} />
-        </Button>
-        <Text ml={'auto'} fontSize={'2xl'}>
-          Agendamento
-        </Text>
-        <Avatar ml={'auto'} src={user.avatar ?? 'https://i.pravatar.cc/300'} />
-      </HStack>
+      <Header />
       <Suspense fallback={<Text>Carregando...</Text>}>
         <AppointmentForm providerId={params.providerId} />
       </Suspense>

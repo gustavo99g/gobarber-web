@@ -68,7 +68,27 @@ const AppointmentForm = ({ providerId }: { providerId: string }) => {
 
   return (
     <>
-      <Container onSubmit={handleSubmit(onSubmit)} as={'form'} px={6} py={2}>
+      <Container
+        onSubmit={handleSubmit(onSubmit)}
+        maxW={{
+          base: '100%',
+          lg: '1200px',
+          xl: '1600px',
+        }}
+        display={{
+          base: 'block',
+          lg: 'flex',
+        }}
+        flexDirection={'row-reverse'}
+        justifyContent={'space-between'}
+        gap={10}
+        py={5}
+        px={{
+          base: 6,
+          lg: 20,
+        }}
+        as={'form'}
+      >
         <Controller
           name={'date'}
           control={control}
@@ -89,12 +109,19 @@ const AppointmentForm = ({ providerId }: { providerId: string }) => {
           )}
         />
 
-        <Box mt={6} px={2}>
+        <Box mt={6} px={2} w={'100%'}>
           <Text mt={4} fontSize={'xl'}>
             Escolha o horário
           </Text>
 
-          <Text fontSize={'sm'} mt={4} color={'gray'}>
+          <Text
+            fontSize={'sm'}
+            mt={{
+              base: 4,
+              lg: 20,
+            }}
+            color={'gray'}
+          >
             Manhã
           </Text>
           <Controller
@@ -122,7 +149,14 @@ const AppointmentForm = ({ providerId }: { providerId: string }) => {
             )}
           />
 
-          <Text fontSize={'sm'} mt={4} color={'gray'}>
+          <Text
+            fontSize={'sm'}
+            mt={{
+              base: 4,
+              lg: 20,
+            }}
+            color={'gray'}
+          >
             Tarde
           </Text>
 
@@ -150,10 +184,10 @@ const AppointmentForm = ({ providerId }: { providerId: string }) => {
               </ToggleGroup>
             )}
           />
+          <Button type='submit' mt={6}>
+            Agendar
+          </Button>
         </Box>
-        <Button type='submit' mt={6}>
-          Agendar
-        </Button>
       </Container>
 
       <Modal

@@ -1,15 +1,7 @@
 'use client';
 
 import { useUser } from '@/hooks/user';
-import {
-  Button,
-  Container,
-  Grid,
-  chakra,
-  Img,
-  Text,
-  Flex,
-} from '@chakra-ui/react';
+import { Button, Container, chakra, Img, Text, Flex } from '@chakra-ui/react';
 
 import { ShutDownIcon } from '../ui/icons/ShutDown';
 import { Avatar } from '../ui/Avatar';
@@ -23,6 +15,7 @@ const Header = () => {
       <Container
         display={'flex'}
         justifyContent={'space-between'}
+        alignItems={'center'}
         maxW={{
           base: '100%',
           lg: '1200px',
@@ -80,7 +73,6 @@ const Header = () => {
               </chakra.span>
             </Text>
             <Avatar
-              alt='avatar'
               src={data?.avatar ?? 'https://i.pravatar.cc/300'}
               justifySelf={'end'}
             />
@@ -91,6 +83,7 @@ const Header = () => {
             w={'fit-content'}
             h={'fit-content'}
             alignSelf={'center'}
+            ml={4}
             display={{ base: 'none', lg: 'block' }}
           >
             <ShutDownIcon />
