@@ -1,12 +1,18 @@
 import { fetchClient } from "@/utils/fetch"
 
-interface createUserPayload{
+interface CreateUserPayload{
     name: string
     email: string
     password: string
     isProvider: string
 }
-const createUser = async (payload: createUserPayload) => {
+
+interface LoginPayload{
+    email: string
+    password: string
+}
+
+const createUser = async (payload: CreateUserPayload) => {
     const res = await fetchClient('/users', {
         method: 'POST',
         headers: {
@@ -17,7 +23,7 @@ const createUser = async (payload: createUserPayload) => {
     return res
 }
 
-const login = async (payload:any) => {
+const login = async (payload:LoginPayload) => {
     const res = await fetchClient('/users/login', {
         method: 'POST',
         headers: {
@@ -29,4 +35,23 @@ const login = async (payload:any) => {
     
 }
 
-export {createUser,login}
+export type User={
+    id: string
+    name: string
+    email: string
+    avatar: string
+    isProvider:boolean
+}
+
+
+const getUser = async ():Promise<User>=>{
+    const res = await fetchClient('/users/me', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    return res
+}
+
+export {createUser,login,getUser}

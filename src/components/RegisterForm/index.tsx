@@ -8,7 +8,6 @@ import { ToggleGroup, ToggleItem } from '../ui/ToggleGroup';
 import { useRouter } from 'next/navigation';
 import { createUser } from '@/services/user';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 const registerSchema = z.object({
   name: z.string().min(3, 'Nome deve ter pelo menos 3 caracteres'),
@@ -50,8 +49,6 @@ const RegisterForm = () => {
 
   const onSubmit = async (data: RegisterFormData) => {
     createUserMutation(data);
-
-    // push('/');
   };
 
   return (

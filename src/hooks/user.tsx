@@ -1,5 +1,5 @@
-// import { createUser } from '@/api/user';
-// import { useMutation, UseMutationOptions } from '@tanstack/react-query';
+import { getUser } from '@/services/user';
+import { useQuery } from '@tanstack/react-query';
 
 // const useCreateUser =<T,>(props?: UseMutationOptions) => {
 //   return useMutation<T>({
@@ -9,3 +9,12 @@
 // };
 
 // export { useCreateUser };
+
+const useUser = () => {
+  return useQuery({
+    queryKey: ['user'],
+    queryFn: getUser,
+  });
+};
+
+export { useUser };

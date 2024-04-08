@@ -1,5 +1,6 @@
 import {  extendTheme, ThemeComponentProps, ThemeComponents } from "@chakra-ui/react";
-import { h } from "vitest/dist/reporters-P7C2ytIv.js";
+import { listTheme } from "./List";
+import { DatePickerTheme } from "./DatePicker";
 
 const theme = extendTheme({
   colors: {
@@ -33,6 +34,12 @@ const theme = extendTheme({
           bg:"orange",
           color:"background",
           fontWeight:500,
+        },
+        ghost:{
+          bg:"transparent",
+          h:"fit-content",
+          w:"fit-content",
+          p:0
         }
       },
       sizes: {
@@ -82,11 +89,14 @@ const theme = extendTheme({
           px:2
         }
       }
-    }
+    },
+    List:listTheme
+    
   } as ThemeComponents,
   
   styles:{
     global:()=>({
+      '.date-picker':DatePickerTheme,
       body:{
         bg:"background",
         color:"white"

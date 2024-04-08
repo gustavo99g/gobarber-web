@@ -17,9 +17,11 @@ const fetchClient = async(url:string,options?:RequestInit)=>{
       return
   }
   const data = await res.json()
-  console.log(data)
+  
   if (!res.ok) {
-      throw data.error ?? data.message ?? 'Ocorreu um erro inesperado'
+      const error = data?.error ?? data?.message ?? 'Ocorreu um erro inesperado'
+
+      throw JSON.stringify(error)
   }
   return data 
 
