@@ -54,4 +54,23 @@ const getUser = async ():Promise<User>=>{
     return res
 }
 
-export {createUser,login,getUser}
+interface UpdateUserPayload {
+    name?: string
+    email?: string
+    currentPassword?: string
+    newPassword?: string
+    confirmPassword?: string
+}
+
+const updateUser = async (payload: UpdateUserPayload) => {
+    const res = await fetchClient('/users', {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    })
+    return res
+}
+
+export {createUser,login,getUser,updateUser}

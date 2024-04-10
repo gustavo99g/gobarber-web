@@ -1,5 +1,10 @@
-import { getUser } from '@/services/user';
-import { useQuery } from '@tanstack/react-query';
+import { getUser, updateUser } from '@/services/user';
+import { useToast } from '@chakra-ui/react';
+import {
+  useMutation,
+  UseMutationOptions,
+  useQuery,
+} from '@tanstack/react-query';
 
 // const useCreateUser =<T,>(props?: UseMutationOptions) => {
 //   return useMutation<T>({
@@ -17,4 +22,20 @@ const useUser = () => {
   });
 };
 
-export { useUser };
+const useUpdateUser = () => {
+  const toast = useToast();
+  return useMutation({
+    mutationFn: updateUser,
+    onSuccess: () => {
+      toast({
+        title: 'Conta atualizada com sucesso',
+        status: 'success',
+        position: 'top-right',
+        duration: 3000,
+        isClosable: true,
+      });
+    },
+  });
+};
+
+export { useUser, useUpdateUser };
