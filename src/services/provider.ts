@@ -55,7 +55,7 @@ const getMonthAvailability = async(day:string, providerId:string):Promise<GetMon
 }
 
 
-interface CreateAppointmentPayload {
+export interface CreateAppointmentPayload {
   date: string;
   provider_id: string;
 

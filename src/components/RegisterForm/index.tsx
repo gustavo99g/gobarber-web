@@ -5,9 +5,8 @@ import { Input } from '../ui/Input';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ToggleGroup, ToggleItem } from '../ui/ToggleGroup';
-import { useRouter } from 'next/navigation';
-import { createUser } from '@/services/user';
-import { useMutation, useQuery } from '@tanstack/react-query';
+
+import { useCreateUser } from '@/hooks/user';
 
 const registerSchema = z.object({
   name: z.string().min(3, 'Nome deve ter pelo menos 3 caracteres'),
@@ -19,8 +18,6 @@ const registerSchema = z.object({
 type RegisterFormData = z.input<typeof registerSchema>;
 
 const RegisterForm = () => {
-  const { push } = useRouter();
-  const toast = useToast();
   const {
     handleSubmit,
     register,
@@ -33,19 +30,7 @@ const RegisterForm = () => {
     resolver: zodResolver(registerSchema),
   });
 
-  const { mutate: createUserMutation, isPending } = useMutation({
-    mutationFn: createUser,
-    onSuccess: () => {
-      toast({
-        title: 'Conta criada com sucesso',
-        status: 'success',
-        position: 'top-right',
-        duration: 3000,
-        isClosable: true,
-      });
-      push('/login');
-    },
-  });
+  const { mutate: createUserMutation, isPending } = useCreateUser();
 
   const onSubmit = async (data: RegisterFormData) => {
     createUserMutation(data);
@@ -82,11 +67,15 @@ const RegisterForm = () => {
       />
       <Input
         isInvalid={!!errors.name}
-        placeholder='Name'
+        placeholder='Nome'
         {...register('name')}
       />
 
-      {errors.name && <Text variant={'error'}>{errors.name?.message}</Text>}
+      {errors.name && (
+        <Text role='alert' variant={'error'}>
+          {errors.name?.message}
+        </Text>
+      )}
 
       <Input
         placeholder='Email'
@@ -96,7 +85,11 @@ const RegisterForm = () => {
         {...register('email')}
       />
 
-      {errors.email && <Text variant={'error'}>{errors.email?.message}</Text>}
+      {errors.email && (
+        <Text role='alert' variant={'error'}>
+          {errors.email?.message}
+        </Text>
+      )}
 
       <Input
         placeholder='Senha'
@@ -107,7 +100,9 @@ const RegisterForm = () => {
       />
 
       {errors.password && (
-        <Text variant={'error'}>{errors.password?.message}</Text>
+        <Text role='alert' variant={'error'}>
+          {errors.password?.message}
+        </Text>
       )}
 
       <Button mt={2} type='submit' isLoading={isPending}>

@@ -6,6 +6,7 @@ import { Button, Container, chakra, Img, Text, Flex } from '@chakra-ui/react';
 import { ShutDownIcon } from '../ui/icons/ShutDown';
 import { Avatar } from '../ui/Avatar';
 import Link from 'next/link';
+import { fetchClient } from '@/utils/fetch';
 
 const Header = () => {
   const { data } = useUser();

@@ -15,7 +15,11 @@ import { ptBR } from 'date-fns/locale';
 import { DatePicker } from '../ui/DatePicker';
 import { createAppointment } from '@/services/provider';
 import { ToggleGroup, ToggleItem } from '../ui/ToggleGroup';
-import { useDayAvailability, useMonthAvailability } from '@/hooks/providers';
+import {
+  useCreateAppointment,
+  useDayAvailability,
+  useMonthAvailability,
+} from '@/hooks/providers';
 import { Controller, useForm } from 'react-hook-form';
 import { format, formatISO, getDay, subDays } from 'date-fns';
 import { useState } from 'react';
@@ -50,8 +54,7 @@ const AppointmentForm = ({ providerId }: { providerId: string }) => {
     providerId
   );
 
-  const { mutate: createAppointmentMutation } = useMutation({
-    mutationFn: createAppointment,
+  const { mutate: createAppointmentMutation } = useCreateAppointment({
     onSuccess: () => {
       onOpen();
     },
@@ -134,6 +137,7 @@ const AppointmentForm = ({ providerId }: { providerId: string }) => {
                 onChange={(value) => {
                   field.onChange(value);
                 }}
+                role='group'
                 value={field.value}
               >
                 {dayAvailability?.morning?.map(({ hour, available }) => (
@@ -141,6 +145,7 @@ const AppointmentForm = ({ providerId }: { providerId: string }) => {
                     variant='solid'
                     key={hour}
                     value={hour.toString()}
+                    role='radio'
                   >
                     {hour}
                   </ToggleItem>
@@ -167,6 +172,7 @@ const AppointmentForm = ({ providerId }: { providerId: string }) => {
               <ToggleGroup
                 {...field}
                 mt={2}
+                role='group'
                 onChange={(value) => {
                   field.onChange(value);
                 }}
@@ -175,6 +181,7 @@ const AppointmentForm = ({ providerId }: { providerId: string }) => {
                 {dayAvailability?.afternoon?.map(({ hour }) => (
                   <ToggleItem
                     variant='solid'
+                    role='radio'
                     key={hour}
                     value={hour.toString()}
                   >

@@ -1,9 +1,15 @@
 import {
+  createAppointment,
+  CreateAppointmentPayload,
   getDayAvailability,
   getMonthAvailability,
   getProviders,
 } from '@/services/provider';
-import { useQuery } from '@tanstack/react-query';
+import {
+  useMutation,
+  UseMutationOptions,
+  useQuery,
+} from '@tanstack/react-query';
 
 const useProviders = () => {
   return useQuery({
@@ -26,4 +32,20 @@ const useMonthAvailability = (date: string, providerId: string) => {
   });
 };
 
-export { useProviders, useDayAvailability, useMonthAvailability };
+interface UseCreateAppointmentProps {
+  onSuccess: () => void;
+}
+const useCreateAppointment = ({ onSuccess }: UseCreateAppointmentProps) => {
+  return useMutation({
+    mutationFn: async (payload: CreateAppointmentPayload) =>
+      await createAppointment(payload),
+    onSuccess,
+  });
+};
+
+export {
+  useProviders,
+  useDayAvailability,
+  useMonthAvailability,
+  useCreateAppointment,
+};

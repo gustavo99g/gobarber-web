@@ -1,14 +1,12 @@
 'use client';
-import { VStack, Button, Text, useToast } from '@chakra-ui/react';
+import { VStack, Button, Text } from '@chakra-ui/react';
 import { Input } from '../ui/Input';
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useMutation } from '@tanstack/react-query';
-import { login } from '@/services/user';
-import { useRouter } from 'next/navigation';
-import { setCookie } from '@/app/actions';
+
+import { useLogin } from '@/hooks/user';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Email inválido' }),
@@ -18,8 +16,6 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>;
 
 const LoginForm = () => {
-  const { push } = useRouter();
-
   const {
     handleSubmit,
     register,
@@ -28,23 +24,7 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const toast = useToast();
-
-  const { mutate: loginMutation, isPending } = useMutation({
-    mutationFn: login,
-    onSuccess: async (data) => {
-      toast({
-        title: 'Login realizado com sucesso',
-        status: 'success',
-        position: 'top-right',
-        duration: 3000,
-        isClosable: true,
-      });
-      await setCookie('token', data.token);
-
-      push('/');
-    },
-  });
+  const { mutate: loginMutation, isPending } = useLogin();
 
   const onSubmit = (data: any) => {
     loginMutation(data);
@@ -71,7 +51,11 @@ const LoginForm = () => {
         type='email'
         autoComplete='username'
       />
-      {errors.email && <Text variant={'error'}>{errors.email.message}</Text>}
+      {errors.email && (
+        <Text role='alert' variant={'error'}>
+          {errors.email.message}
+        </Text>
+      )}
       <Input
         {...register('password')}
         isInvalid={!!errors.password}
@@ -81,7 +65,9 @@ const LoginForm = () => {
       />
 
       {errors.password && (
-        <Text variant={'error'}>{errors.password.message}</Text>
+        <Text role='alert' variant={'error'}>
+          {errors.password.message}
+        </Text>
       )}
 
       <Button mt={2} type='submit' isLoading={isPending}>
